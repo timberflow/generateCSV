@@ -1,0 +1,173 @@
+query 1:国泰君安
+:
+{"s.stock.chinese_spelling": ["stock_name_0"], "s.stock.code": ["stock_code_0"], "s.stock.establishment_date": ["2023-02-20"], "s.stock.listed_sector": ["\u521b\u4e1a\u677f"], "s.stock.name": ["\u56fd\u6cf0\u541b\u5b89"], "s.stock.province": ["\u4e0a\u6d77\u5e02"], "s.stock.registered_capital": ["272.2063903808594"]}
+query 2:易方达蓝筹精选混合
+:
+Error
+query 3:国泰君安的收盘价
+:
+{"sd.stock_data.closing_price": [2.378669261932373]}
+query 4:易方达蓝筹精选混合的净值
+:
+{"pof.public_offering_fund.code": ["public_offering_fund_code_0"], "pof.public_offering_fund.latest_net_worth": ["5790003.0"], "pof.public_offering_fund.latest_scale": ["6655966.5"], "pof.public_offering_fund.management_fee": ["0.5"], "pof.public_offering_fund.name": ["\u6613\u65b9\u8fbe\u84dd\u7b79\u7cbe\u9009\u6df7\u5408"], "pof.public_offering_fund.sales_status": ["on sale"], "pof.public_offering_fund.subscription_end_time": ["utc datetime: 2023-01-13T00:00:00.000000, timezone_offset: 0"], "pof.public_offering_fund.subscription_start_time": ["utc datetime: 2022-02-17T00:00:00.000000, timezone_offset: 0"]}
+query 5:2021年9月23日国泰君安的收盘价
+:
+{}
+query 6:2021年9月23日易方达蓝筹精选混合的净值
+:
+{"pof.public_offering_fund.code": ["public_offering_fund_code_0"], "pof.public_offering_fund.latest_net_worth": ["5790003.0"], "pof.public_offering_fund.latest_scale": ["6655966.5"], "pof.public_offering_fund.management_fee": ["0.5"], "pof.public_offering_fund.name": ["\u6613\u65b9\u8fbe\u84dd\u7b79\u7cbe\u9009\u6df7\u5408"], "pof.public_offering_fund.sales_status": ["on sale"], "pof.public_offering_fund.subscription_end_time": ["utc datetime: 2023-01-13T00:00:00.000000, timezone_offset: 0"], "pof.public_offering_fund.subscription_start_time": ["utc datetime: 2022-02-17T00:00:00.000000, timezone_offset: 0"]}
+query 7:生态园林的现价和最高价
+:
+{"td.trade_data.closing_price": [1.3189767599105835], "td.trade_data.maximum_price": [9.873234748840332]}
+query 8:易方达蓝筹精选混合的收益率和净值
+:
+{"pof.public_offering_fund.code": ["public_offering_fund_code_0"], "pof.public_offering_fund.latest_net_worth": ["5790003.0"], "pof.public_offering_fund.latest_scale": ["6655966.5"], "pof.public_offering_fund.management_fee": ["0.5"], "pof.public_offering_fund.name": ["\u6613\u65b9\u8fbe\u84dd\u7b79\u7cbe\u9009\u6df7\u5408"], "pof.public_offering_fund.sales_status": ["on sale"], "pof.public_offering_fund.subscription_end_time": ["utc datetime: 2023-01-13T00:00:00.000000, timezone_offset: 0"], "pof.public_offering_fund.subscription_start_time": ["utc datetime: 2022-02-17T00:00:00.000000, timezone_offset: 0"]}
+query 9:2021年9月23日国泰君安的开盘价和收盘价
+:
+{}
+query 10:2021年9月23日易方达蓝筹精选混合的收益率和净值
+:
+{"pof.public_offering_fund.code": ["public_offering_fund_code_0"], "pof.public_offering_fund.latest_net_worth": ["5790003.0"], "pof.public_offering_fund.latest_scale": ["6655966.5"], "pof.public_offering_fund.management_fee": ["0.5"], "pof.public_offering_fund.name": ["\u6613\u65b9\u8fbe\u84dd\u7b79\u7cbe\u9009\u6df7\u5408"], "pof.public_offering_fund.sales_status": ["on sale"], "pof.public_offering_fund.subscription_end_time": ["utc datetime: 2023-01-13T00:00:00.000000, timezone_offset: 0"], "pof.public_offering_fund.subscription_start_time": ["utc datetime: 2022-02-17T00:00:00.000000, timezone_offset: 0"]}
+query 11:国泰君安和中信证券的开盘价和收盘价和3日累计涨幅
+:
+{}
+query 12:中欧医疗健康混合c和易方达蓝筹精选混合的收益率和净值
+:
+{}
+query 13:2021年9月23日国泰君安和中信证券的开盘价和收盘价和3日平均成交额
+:
+{}
+query 14:2021年9月23日中欧医疗健康混合c和易方达蓝筹精选混合的收益率和净值
+:
+{}
+query 15:国泰君安和中信证券的3日累计涨幅
+:
+{}
+query 16:中欧医疗健康混合c和易方达蓝筹精选混合的净值
+:
+{}
+query 17:2021年9月23日国泰君安和中信证券的3日平均成交额
+:
+Error
+query 18:2021年9月23日中欧医疗健康混合c和易方达蓝筹精选混合的净值
+:
+{}
+query 19:收盘价大于15的股票有哪些
+:
+{}
+query 20:董事长为贺青的上市公司
+:
+{}
+query 21:上市时间早于2022年的上市公司
+:
+{}
+query 22:净值大于1的基金
+:
+{}
+query 23:昨日最低价小于20且昨日开盘价小于30的股票有哪些
+:
+{}
+query 24:净值大于1且收益率大于10%的基金
+:
+{}
+query 25:收盘价前10的股票有哪些
+:
+{}
+query 26:净值前3的基金
+:
+{}
+query 27:收盘价最大的股票是哪个
+:
+{}
+query 28:净值最高的基金
+:
+{}
+query 29:最近国泰君安的收盘价
+:
+{}
+query 30:最近易方达蓝筹精选混合的净值
+:
+{}
+query 31:涨幅较大的股票
+:
+{}
+query 32:绩优股有哪些
+:
+{}
+query 33:前几天国泰君安的涨幅情况
+:
+Error
+query 34:国泰君安的基本情况
+:
+{}
+query 35:市盈率大于10的券商行业股票
+:
+{}
+query 36:券商行业的成份股
+:
+{}
+query 37:国泰君安和中信证券的收盘价差多少？
+:
+{}
+query 38:中欧医疗健康混合c和易方达蓝筹精选混合的净值差多少
+:
+{}
+query 39:国泰君安的收盘价大于10元吗？
+:
+Error
+query 40:中欧医疗健康混合c的净值大于1吗
+:
+Error
+query 41:国泰君安的净利润同比
+:
+Error
+query 42:易方达蓝筹精选混合的净值环比
+:
+Error
+query 43:持有东方财富且持股比例大于3%的基金？
+:
+{}
+query 44:易方达蓝筹持仓比例大于3%的股票
+:
+{}
+query 45:社保基金持股比例大于3%的股票所属的行业？
+:
+{}
+query 46:市值高于国泰君安的股票
+:
+{}
+query 47:净值大于易方达蓝筹精选混合的基金
+:
+{}
+query 48:同时属于互联网行业和国产软件行业的股票
+:
+{}
+query 49:和同花顺相同行业的股票有哪些？
+:
+Error
+query 50:去年国泰君安第一季度净利润
+:
+Error
+query 51:去年国泰君安净利润
+:
+{}
+query 52:收盘价大于100
+:
+{}
+query 53:收盘价1-2元
+:
+{}
+query 54:锂电池涂布机的下游产业有哪些
+:
+{}
+query 55:张坤管理的股票
+:
+{}
+query 56:比亚迪经营产业关联的股票
+:
+{}
+query 57:国泰君安涨跌幅行业排名
+:
+{}
+query 58:科大讯飞为什么大涨:
+{}
