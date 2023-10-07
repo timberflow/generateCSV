@@ -1,0 +1,15 @@
+CREATE TAG INDEX IF NOT EXISTS chairman_index ON chairman(name(50));
+CREATE TAG INDEX IF NOT EXISTS fund_manager_index ON fund_manager(name(50));
+CREATE TAG INDEX IF NOT EXISTS industry_index ON industry(name(50));
+CREATE TAG INDEX IF NOT EXISTS public_offering_fund_index ON public_offering_fund(name(50));
+CREATE TAG INDEX IF NOT EXISTS stock_index ON stock(name(50));
+CREATE TAG INDEX IF NOT EXISTS stockholder_index ON stockholder(name(50));
+CREATE TAG INDEX IF NOT EXISTS trade_index ON trade(name(50));
+
+CREATE TAG INDEX IF NOT EXISTS stock_data_index ON stock_data(`date`);
+CREATE TAG INDEX IF NOT EXISTS trade_data_index ON trade_data(`date`);
+
+CREATE EDGE INDEX IF NOT EXISTS originate_from_index ON originate_from(marketing_time);
+
+REBUILD TAG INDEX chairman_index, fund_manager_index, industry_index, public_offering_fund_index, stock_index, stockholder_index, trade_index, stock_data_index, trade_data_index;
+REBUILD EDGE INDEX originate_from_index;

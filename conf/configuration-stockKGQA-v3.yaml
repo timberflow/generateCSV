@@ -1,0 +1,581 @@
+client:
+  version: v3
+  address: "172.23.109.155:9669"
+  user: root
+  password: nebula
+  concurrencyPerAddress: 100
+  reconnectInitialInterval: 1s
+  retry: 3
+  retryInitialInterval: 1s
+
+manager:
+  spaceName: stockKGQA
+  batch: 128
+  readerConcurrency: 50
+  importerConcurrency: 512
+  statsInterval: 10s
+  hooks:
+    before:
+      - statements:
+        - |
+          DROP SPACE IF EXISTS stockKGQA;
+          CREATE SPACE IF NOT EXISTS stockKGQA(partition_num=5, replica_factor=1, vid_type=FIXED_STRING(50));
+          USE stockKGQA;
+          CREATE TAG IF NOT EXISTS stock(code string, name string, chinese_spelling string, registered_capital float, listed_sector string, establishment_date date, province string);
+          CREATE TAG IF NOT EXISTS stock_data(`date` date, opening_price float, closing_price float, maximum_price float, minimum_price float, range float, volume int, raising_limit_days int, raising_limit bool, hong_san_bing bool);
+          CREATE TAG IF NOT EXISTS stock_financial_information(`date` date, year int, quarter int, net_profit float, inventory_turnover float);
+          CREATE TAG IF NOT EXISTS new_stock(code string, amount int, online_release_date string);
+          CREATE TAG IF NOT EXISTS chairman(name string, sex string, appointment_date string, departure_date string);
+          CREATE TAG IF NOT EXISTS stockholder(name string);
+          CREATE TAG IF NOT EXISTS trade(code string, name string);
+          CREATE TAG IF NOT EXISTS trade_data(`date` date, opening_price float, closing_price float, maximum_price float, minimum_price float, range float);
+          CREATE TAG IF NOT EXISTS information(id string, name string);
+          CREATE TAG IF NOT EXISTS public_offering_fund(code string, name string, sales_status string, management_fee float, latest_scale float, subscription_start_time datetime, subscription_end_time datetime, latest_net_worth float);
+          CREATE TAG IF NOT EXISTS fund_manager(name string, sex string, degree string);
+          CREATE TAG IF NOT EXISTS industry(name string, scale float);
+
+          CREATE EDGE IF NOT EXISTS originate_from(marketing_time date);
+          CREATE EDGE IF NOT EXISTS is_chairman_of();
+          CREATE EDGE IF NOT EXISTS is_stockholder_of(shareholding_ratio float, circulation_shareholding_ratio float);
+          CREATE EDGE IF NOT EXISTS belong_to();
+          CREATE EDGE IF NOT EXISTS hold(position_ratio float, position_amount float);
+          CREATE EDGE IF NOT EXISTS manage();
+          CREATE EDGE IF NOT EXISTS involve(tendency int);
+          CREATE EDGE IF NOT EXISTS associate();
+          CREATE EDGE IF NOT EXISTS affect();
+          CREATE EDGE IF NOT EXISTS has_stock_data();
+          CREATE EDGE IF NOT EXISTS has_stock_financial_information();
+          CREATE EDGE IF NOT EXISTS has_trade_data();
+        wait: 10s
+
+log:
+  level: INFO
+  console: true
+  files:
+   - ../logs/nebula-importer.log
+
+sources:
+  - path: ./stock.csv
+    batch: 256
+    csv:
+      delimiter: ","
+      withHeader: false
+      lazyQuotes: false
+    tags:
+    - name: stock
+      id:
+        type: "STRING"
+        index: 0
+      ignoreExistedIndex: true
+      props:
+        - name: "code"
+          type: "STRING"
+          index: 1
+        - name: "name"
+          type: "STRING"
+          index: 2
+        - name: "chinese_spelling"
+          type: "STRING"
+          index: 3
+        - name: "registered_capital"
+          type: "FLOAT"
+          index: 4
+        - name: "listed_sector"
+          type: "STRING"
+          index: 5
+        - name: "establishment_date"
+          type: "DATE"
+          index: 6
+        - name: "province"
+          type: "STRING"
+          index: 7
+
+  - path: ./stock_data.csv
+    batch: 256
+    csv:
+      delimiter: ","
+      withHeader: false
+      lazyQuotes: false
+    tags:
+    - name: stock_data
+      id:
+        type: "STRING"
+        index: 0
+      ignoreExistedIndex: true
+      props:
+        - name: "date"
+          type: "date"
+          index: 1
+        - name: "opening_price"
+          type: "FLOAT"
+          index: 2
+        - name: "closing_price"
+          type: "FLOAT"
+          index: 3
+        - name: "maximum_price"
+          type: "FLOAT"
+          index: 4
+        - name: "minimum_price"
+          type: "FLOAT"
+          index: 5
+        - name: "range"
+          type: "FLOAT"
+          index: 6
+        - name: "volume"
+          type: "INT"
+          index: 7
+        - name: "raising_limit_days"
+          type: "INT"
+          index: 8
+        - name: "raising_limit"
+          type: "BOOL"
+          index: 9
+        - name: "hong_san_bing"
+          type: "BOOL"
+          index: 10
+
+  - path: ./stock_financial_information.csv
+    batch: 256
+    csv:
+      delimiter: ","
+      withHeader: false
+      lazyQuotes: false
+    tags:
+    - name: stock_financial_information
+      id:
+        type: "STRING"
+        index: 0
+      ignoreExistedIndex: true
+      props:
+        - name: "date"
+          type: "date"
+          index: 1
+        - name: "year"
+          type: "INT"
+          index: 2
+        - name: "quarter"
+          type: "INT"
+          index: 3
+        - name: "net_profit"
+          type: "FLOAT"
+          index: 4
+        - name: "inventory_turnover"
+          type: "FLOAT"
+          index: 5
+
+  - path: ./new_stock.csv
+    batch: 256
+    csv:
+      delimiter: ","
+      withHeader: false
+      lazyQuotes: false
+    tags:
+    - name: new_stock
+      id:
+        type: "STRING"
+        index: 0
+      ignoreExistedIndex: true
+      props:
+        - name: "code"
+          type: "STRING"
+          index: 1
+        - name: "amount"
+          type: "INT"
+          index: 2
+        - name: "online_release_date"
+          type: "STRING"
+          index: 3
+
+  - path: ./chairman.csv
+    batch: 256
+    csv:
+      delimiter: ","
+      withHeader: false
+      lazyQuotes: false
+    tags:
+    - name: chairman
+      id:
+        type: "STRING"
+        index: 0
+      ignoreExistedIndex: true
+      props:
+        - name: "name"
+          type: "STRING"
+          index: 1
+        - name: "sex"
+          type: "STRING"
+          index: 2
+        - name: "appointment_date"
+          type: "STRING"
+          index: 3
+        - name: "departure_date"
+          type: "STRING"
+          index: 4
+
+  - path: ./stockholder.csv
+    batch: 256
+    csv:
+      delimiter: ","
+      withHeader: false
+      lazyQuotes: false
+    tags:
+    - name: stockholder
+      id:
+        type: "STRING"
+        index: 0
+      ignoreExistedIndex: true
+      props:
+        - name: "name"
+          type: "STRING"
+          index: 1
+
+  - path: ./trade.csv
+    batch: 256
+    csv:
+      delimiter: ","
+      withHeader: false
+      lazyQuotes: false
+    tags:
+    - name: trade
+      id:
+        type: "STRING"
+        index: 0
+      ignoreExistedIndex: true
+      props:
+        - name: "code"
+          type: "STRING"
+          index: 1
+        - name: "name"
+          type: "STRING"
+          index: 2
+
+  - path: ./trade_data.csv
+    batch: 256
+    csv:
+      delimiter: ","
+      withHeader: false
+      lazyQuotes: false
+    tags:
+    - name: trade_data
+      id:
+        type: "STRING"
+        index: 0
+      ignoreExistedIndex: true
+      props:
+        - name: "date"
+          type: "date"
+          index: 1
+        - name: "opening_price"
+          type: "FLOAT"
+          index: 2
+        - name: "closing_price"
+          type: "FLOAT"
+          index: 3
+        - name: "maximum_price"
+          type: "FLOAT"
+          index: 4
+        - name: "minimum_price"
+          type: "FLOAT"
+          index: 5
+        - name: "range"
+          type: "FLOAT"
+          index: 6
+
+  - path: ./information.csv
+    batch: 256
+    csv:
+      delimiter: ","
+      withHeader: false
+      lazyQuotes: false
+    tags:
+    - name: information
+      id:
+        type: "STRING"
+        index: 0
+      ignoreExistedIndex: true
+      props:
+        - name: "id"
+          type: "STRING"
+          index: 1
+        - name: "name"
+          type: "STRING"
+          index: 2
+
+  - path: ./public_offering_fund.csv
+    batch: 256
+    csv:
+      delimiter: ","
+      withHeader: false
+      lazyQuotes: false
+    tags:
+    - name: public_offering_fund
+      id:
+        type: "STRING"
+        index: 0
+      ignoreExistedIndex: true
+      props:
+        - name: "code"
+          type: "STRING"
+          index: 1
+        - name: "name"
+          type: "STRING"
+          index: 2
+        - name: "sales_status"
+          type: "STRING"
+          index: 3
+        - name: "management_fee"
+          type: "FLOAT"
+          index: 4
+        - name: "latest_scale"
+          type: "FLOAT"
+          index: 5
+        - name: "subscription_start_time"
+          type: "DATETIME"
+          index: 6
+        - name: "subscription_end_time"
+          type: "DATETIME"
+          index: 7
+        - name: "latest_net_worth"
+          type: "FLOAT"
+          index: 8
+
+  - path: ./fund_manager.csv
+    batch: 256
+    csv:
+      delimiter: ","
+      withHeader: false
+      lazyQuotes: false
+    tags:
+    - name: fund_manager
+      id:
+        type: "STRING"
+        index: 0
+      ignoreExistedIndex: true
+      props:
+        - name: "name"
+          type: "STRING"
+          index: 1
+        - name: "sex"
+          type: "STRING"
+          index: 2
+        - name: "degree"
+          type: "STRING"
+          index: 3
+
+  - path: ./industry.csv
+    batch: 256
+    csv:
+      delimiter: ","
+      withHeader: false
+      lazyQuotes: false
+    tags:
+    - name: industry
+      id:
+        type: "STRING"
+        index: 0
+      ignoreExistedIndex: true
+      props:
+        - name: "name"
+          type: "STRING"
+          index: 1
+        - name: "scale"
+          type: "FLOAT"
+          index: 2
+
+
+  - path: ./originate_from.csv
+    batch: 256
+    edges:
+    - name: originate_from
+      src:
+        id:
+          type: "STRING"
+          index: 0
+      dst:
+        id:
+          type: "STRING"
+          index: 1
+      props:
+        - name: "marketing_time"
+          type: "DATE"
+          index: 2
+
+  - path: ./is_chairman_of.csv
+    batch: 256
+    edges:
+    - name: is_chairman_of
+      src:
+        id:
+          type: "STRING"
+          index: 0
+      dst:
+        id:
+          type: "STRING"
+          index: 1
+
+  - path: ./is_stockholder_of.csv
+    batch: 256
+    edges:
+    - name: is_stockholder_of
+      src:
+        id:
+          type: "STRING"
+          index: 0
+      dst:
+        id:
+          type: "STRING"
+          index: 1
+      props:
+        - name: "shareholding_ratio"
+          type: "FLOAT"
+          index: 2
+        - name: "circulation_shareholding_ratio"
+          type: "FLOAT"
+          index: 3
+
+  - path: ./belong_to.csv
+    batch: 256
+    edges:
+    - name: belong_to
+      src:
+        id:
+          type: "STRING"
+          index: 0
+      dst:
+        id:
+          type: "STRING"
+          index: 1
+
+  - path: ./hold.csv
+    batch: 256
+    edges:
+    - name: hold
+      src:
+        id:
+          type: "STRING"
+          index: 0
+      dst:
+        id:
+          type: "STRING"
+          index: 1
+      props:
+        - name: "position_ratio"
+          type: "FLOAT"
+          index: 2
+        - name: "position_amount"
+          type: "FLOAT"
+          index: 3
+
+  - path: ./manage.csv
+    batch: 256
+    edges:
+    - name: manage
+      src:
+        id:
+          type: "STRING"
+          index: 0
+      dst:
+        id:
+          type: "STRING"
+          index: 1
+
+  - path: ./involve_stock.csv
+    batch: 256
+    edges:
+    - name: involve
+      src:
+        id:
+          type: "STRING"
+          index: 0
+      dst:
+        id:
+          type: "STRING"
+          index: 1
+      props:
+        - name: "tendency"
+          type: "INT"
+          index: 2
+
+  - path: ./involve_public_offering_fund.csv
+    batch: 256
+    edges:
+    - name: involve
+      src:
+        id:
+          type: "STRING"
+          index: 0
+      dst:
+        id:
+          type: "STRING"
+          index: 1
+      props:
+        - name: "tendency"
+          type: "INT"
+          index: 2
+
+  - path: ./associate.csv
+    batch: 256
+    edges:
+    - name: associate
+      src:
+        id:
+          type: "STRING"
+          index: 0
+      dst:
+        id:
+          type: "STRING"
+          index: 1
+
+  - path: ./affect.csv
+    batch: 256
+    edges:
+    - name: affect
+      src:
+        id:
+          type: "STRING"
+          index: 0
+      dst:
+        id:
+          type: "STRING"
+          index: 1
+
+  - path: ./has_stock_data.csv
+    batch: 256
+    edges:
+      - name: has_stock_data
+        src:
+          id:
+            type: "STRING"
+            index: 0
+        dst:
+          id:
+            type: "STRING"
+            index: 1
+
+  - path: ./has_stock_financial_information.csv
+    batch: 256
+    edges:
+      - name: has_stock_financial_information
+        src:
+          id:
+            type: "STRING"
+            index: 0
+        dst:
+          id:
+            type: "STRING"
+            index: 1
+
+  - path: ./has_trade_data.csv
+    batch: 256
+    edges:
+      - name: has_trade_data
+        src:
+          id:
+            type: "STRING"
+            index: 0
+        dst:
+          id:
+            type: "STRING"
+            index: 1
+
+
