@@ -1,0 +1,5 @@
+pandas
+nebula3-python
+django
+prettytable
+jieba
