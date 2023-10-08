@@ -206,8 +206,7 @@ def generate_chairman():
         rows.append(row)
     with open('./stockKGQA/chairman.csv', 'a+', newline='', encoding="utf8") as file:
         writer = csv.writer(file)
-        for row in rows:
-            writer.writerows(row)
+        writer.writerows(rows)
     print("generate_chairman total: ", time.time() - st)
 
 
