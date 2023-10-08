@@ -1,6 +1,6 @@
 client:
   version: v3
-  address: "172.23.109.155:9669"
+  address: "172.19.31.82:9669"
   user: root
   password: nebula
   concurrencyPerAddress: 100
